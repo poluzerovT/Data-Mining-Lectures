@@ -125,8 +125,8 @@
 		
 		\textbf{Дано}:
 		
-		$\{x_1, ..., x_l\} \subset X$ - Обучающая выборка (samples)
-		$y_i = y(x_i), i=1, ..., l$ - известные ответы
+		$\{x_1, ..., x_\ell\} \subset X$ - Обучающая выборка (samples)
+		$y_i = y(x_i), i=1, ..., \ell$ - известные ответы
 		
 		\textbf{Необходимо}:
 		
@@ -153,9 +153,9 @@
 		 $$
 		 F = (f(x_{ij}))_{n \times l} = 
 		 \begin{pmatrix}
-		 	f_{11} & ... & f_{1l} \\
+		 	f_{11} & ... & f_{1\ell} \\
 		 	... & ... & ... \\
-		 	f_{n1} & ... & f_{nl} \\		 	
+		 	f_{n1} & ... & f_{n\ell} \\		 	
 		 \end{pmatrix}
 		 $$
 	\end{frame}
@@ -205,8 +205,131 @@
 	\end{frame}
 
 	\begin{frame}
+		\frametitle{Метод обучения}
 		
+		Метод обучения (learning algorithm) - это отображение вида
+		$$
+		\mu : (X \times Y)^{\ell} \to A
+		$$
+		
+		которое произвольной выборке $X^{\ell} = (x_i, y_i)_{i=1}^{\ell}$ ставит в соответствие 
+		некоторый алгоритм $a \in A$
 	\end{frame}
 		
+	\begin{frame}
+		\frametitle{Этап обучения и теста}
+		\textbf{Этап обучения (train):}
+		
+		Метод обучения $\mu$ строит по выборке $X^{\ell} = (x_i, y_i)_{i=1}^{\ell}$ 
+		алгоритм $a = \mu(X^{\ell})$
+		\skip
+		
+		$$
+		\begin{pmatrix}
+			f_1(x_1) & ... & f_n(x_1) \\
+			... & ... & ... \\
+			f_1(x_{\ell}) & ... & f_n(x_{\ell}) \\
+		\end{pmatrix}
+		\xrightarrow{\text{y}}
+		\begin{pmatrix}
+			y_1 \\
+			... \\
+			y_{\ell}
+		\end{pmatrix}
+	% чето не работает. не видит конец формулы
+		\xrightarrow{\text{\mu}}	
+		a
+		$$
+		\textbf{Этап применения (test):}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Функционалы качества}
+		
+		$\mathcal{L}(a, x)$ - функция потерь (loss function) - величина ошибки алгоритма $a \in A$ на объекте $x \in X$
+		
+		\textbf{Функции потерь для задач классификации:}
+		\begin{itemize}
+			\item $\mathcal{L}(a, x) = [a(x) \not= y(x)]$ - индикатор ошибки
+		\end{itemize}
+		
+		\textbf{Функции потерь для задач регрессии:}
+		\begin{itemize}
+			\item $\mathcal{L}(a, x) = |a(x) - y(x)|$ - абслолютное значение ошибки
+			\item $\mathcal{L}(a, x) = (a(x) - y(x))^2$ - квадрат ошибки
+		\end{itemize}
+		
+		Эмпирический риск - функционал качества алгоритма $a$ на $X^{\ell}$
+		$$
+		Q(a, X^{\ell}) = \frac{1}{\ell} \sum_{i=1}^{\ell} \mathcal{L}(a, x_i)
+		$$
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{}
+		Метод минимизации эмпирического риска:
+		$$
+		\mu(X^{\ell}) = arg \min_{a \in A} Q(a, X^{\ell})
+		$$
+		
+		\textbf{Пример:} метод наименьших квадратов $Y = \mathbb{R}, \mathcal{L} - квадратична$
+		$$
+		\mu(X^{\ell}) = arg \min_{a \in A} \sum_{i=1}^{\ell} (g(x_i, \theta) - y_i)^{2}
+		$$
+		
+		\textbf{Проблема обобщающей способности}
+		\begin{itemize}
+			\item найдем ли мы "закон природы" или переобучимся,
+			то есть подгоним функцию $g(x_i, \theta) под заданные значения?$
+			\item будет ли $a = \mu(X^{\ell})$ приближать функцию $y$ на всем $X$?
+			\item будет ли $Q(a, X^{\ell})$ мало на новых данных - контрольной выборке $X^{k} = (x_{i}^{\prime}, y_{i}^{\prime})_{i=1}^{k}, y_{i}^{\prime} = y(x_i)$
+		\end{itemize}
+	\end{frame}
+
+	% пример с переобучением пару слайдов
+	
+	\begin{frame}
+		content...
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Переобучение - одна из проблем машинного обучения}
+		\begin{itemize}
+			\item \textbf{Из-за чего возникает переобучение?}
+			
+			избыточная сложность пространства параметров $\Theta$, лишние степени свободы в модели $g(x, \theta)$ "тратятся" на чрезмерно точную подгонку под обучающую выборку. - переобучение есть всегда, когда есть оптимизация параметров по конечной (заведомо не полной) выборке.
+			
+			\item \textbf{Как обнаружить переобучение?}
+			
+			- эмпирически, путем разбиения выборки на train и test
+			
+			\item \textbf{Избавиться нельзя. Как минимизировать?}
+			
+			- минимизировать HoldOut, LOO или CV
+			- наклыдвать ограничения на $\theta$ - регуляризация
+			- минимизировать одну из теоретических оценок
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Эмпирические оценки обобщающей способности}
+		\begin{itemize}
+			\item Эмпирический риск на тестовых данных (hold-out)
+			$$
+			HO(\mu, X^{\ell}, X^{k}) = Q(\mu(X^{\ell}, X^{k})) \to min
+			$$
+			
+			\item Скользящий контроль (leave-one-out) $L = \ell + 1$:
+			$$
+			LOO(\mu, X^{L}) = \frac{1}{L} \sum_{i=1}^{L} \mathcal{L}(\mu(X^{L} \setminus \{x_i\}), x_i) \to min
+			$$
+			
+			\item Кросс-проверка (cross-validation), $L = \ell + k, X^{L} = X_{n}^{\ell} \sqcup X_{n}^{k}$:
+			$$
+			CV(\mu, X^{L}) = \frac{1}{|N|} \sum_{n \in N} Q(\mu(X_{n}^{\ell}), X_{n}^{k} ) \to min
+			$$
+		\end{itemize}
+	\end{frame}
+	
 		
 \end{document}

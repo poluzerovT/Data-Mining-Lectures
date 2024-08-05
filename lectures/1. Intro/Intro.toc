@@ -1,1 +1,4 @@
 \babel@toc {russian}{}\relax 
+\beamer@sectionintoc {1}{О чем предмет}{3}{0}{1}
+\beamer@sectionintoc {2}{Основные обозначения}{6}{0}{2}
+\beamer@sectionintoc {3}{Примеры реальных задач}{18}{0}{3}

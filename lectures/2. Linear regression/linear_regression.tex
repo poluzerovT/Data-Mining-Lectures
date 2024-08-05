@@ -1,0 +1,88 @@
+% presentation
+\documentclass{beamer}
+
+\usetheme{Boadilla}
+
+% rus lang
+\usepackage[main=russian,english]{babel}
+
+% insert images
+\usepackage{wrapfig}
+
+\title{Лекция 2. Линейная регрессия}
+\subtitle{Основы интеллектуального анализа данных}
+\author{Полузёров Т. Д.}
+\institute{БГУ ФПМИ}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+
+		
+	\begin{frame}
+		\frametitle{Опрделение линейной регрессии}
+		
+		Модель линейной регрессии
+		
+		$$
+		a(x) = \omega_0 + \sum_{j=1}^{n} \omega_j x_j = 
+		\omega_0 + \langle \omega, x\rangle 
+		$$
+		Определяется вектором коэффициентов $\omega = (\omega_1, ..., \omega_n) \in \mathbb{R}^{n}$ и свободным членом $\omega_0 \in \mathbb{R}$
+		
+		\vspace{15}
+		
+		Для упрощения формул добавим к признаковому описанию объектов признак равный единице $x := (1, x_1, ..., x_n), \omega=(\omega_0, \omega_1, ..., \omega_{n})$
+		
+		$$
+		a(x) = \langle \omega, x \rangle
+		$$
+		
+	\end{frame}
+
+
+	\begin{frame}
+		\frametitle{Метод наименьших квадратов (МНК)}
+		Пусть задан датасет $(X, y)_{i=1}^{\ell}$, где $X = (x_i)_{i=1}^{\ell} \subseteq \mathbb{R}^{\ell \times n}$ - матрица признаков, $y = (y_i)_{i=1}^{\ell}\subseteq \mathbb{R}^{\ell}$ - вектор значений
+		
+		Мы хотим приблизить эту зависимость моделью вида: $a(x) = \langle \omega, x \rangle$
+		
+		Ошибка на объекте $x_i$:
+		
+		$$
+		e_i = a(x_i) - y_i
+		$$
+		
+		Подберем коэффициенты $\omega$ таким образом:
+		$$
+		\mathcal{L}(a, x, y) = (a(x_i) - y_i)^{2} = e_i^{2}
+		$$ - квадратичная функция потерь
+		
+		$$
+		Q(a, X, y) 
+		= \frac{1}{\ell} \sum_{i=1}^{\ell} \mathcal{L}(a, x_i, y_i)
+		= \frac{1}{\ell} \sum_{i=1}^{\ell} (a(x_i) - y_i)^{2}
+		= \frac{1}{\ell} \sum_{i=1}^{\ell} e_i
+		\to \min_{\omega}
+		$$
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Решение МНК}
+		Точное решение:
+		$$
+		\omega = (X^T X)^{-1} X^Ty
+		$$
+		
+		
+		
+		
+	\end{frame}
+
+
+
+
+\end{document}

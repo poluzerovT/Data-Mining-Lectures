@@ -1,8 +1,8 @@
 % presentation
 \documentclass{beamer}
 
-% \usetheme{Boadilla}
-\usetheme{Warsaw}
+\usetheme{Boadilla}
+%\usetheme{Warsaw}
 
 % rus lang
 \usepackage[main=russian,english]{babel}
@@ -263,39 +263,26 @@
 		\frametitle{Основной метод обучения}
 		Метод минимизации эмпирического риска:
 		$$
-		\mu(X^{\ell}) = arg \min_{a \in A} Q(a, X^{\ell})
+		\mu(X) = arg \min_{a \in A} Q(a, X)
 		$$
 		
-		\textbf{Пример:} метод наименьших квадратов $Y = \mathbb{R}, \mathcal{L} - квадратична$
+		\textbf{Пример:} метод наименьших квадратов $Y = \mathbb{R}, \mathcal{L}$ - квадратична
 		$$
-		\mu(X^{\ell}) = arg \min_{a \in A} \sum_{i=1}^{\ell} (g(x_i, \theta) - y_i)^{2}
+		\mu(X) = arg \min_{a \in A} \sum_{i=1}^{\ell} (a(x_i, \theta) - y_i)^{2}
 		$$
 		
-		\textbf{Проблема обобщающей способности}
+		\vspace{5}
+		
+		Два этапа модели:
 		\begin{itemize}
-			\item найдем ли мы "закон природы" или переобучимся,
-			то есть подгоним функцию $g(x_i, \theta) под заданные значения?$
-			\item будет ли $a = \mu(X^{\ell})$ приближать функцию $y$ на всем $X$?
-			\item будет ли $Q(a, X^{\ell})$ мало на новых данных - контрольной выборке $X^{k} = (x_{i}^{\prime}, y_{i}^{\prime})_{i=1}^{k}, y_{i}^{\prime} = y(x_i)$
+			\item Этап обучения (fit): по имеющейся выборке $X$ с помощью метода обучения $\mu$ построить $a$.
+		
+			\item Этап применения обученной модели (predict): $\hat{y}_i = a(x_i^{'})$
 		\end{itemize}
 	\end{frame}
 		
-		
 	\begin{frame}
-		\frametitle{Этап обучения и применения}
-		\textbf{Этап обучения (fit, train):}
-		
-		Метод обучения $\mu$ строит по выборке $X^{\ell} = (x_i, y_i)_{i=1}^{\ell}$ 
-		алгоритм $a = \mu(X^{\ell})$
-		
-		\vspace{15}
-		
-		\textbf{Этап применения (predict):}
-		Имея настроенную модель $a$ можно применять ее на других объектах $X^{'} $
-		
-		$$
-		\hat{y}_i = a(x_i^{'}), 
-		$$
+		\frametitle{Обобщающая способность}
 		
 	\end{frame}
 
@@ -323,19 +310,21 @@
 	\begin{frame}
 		\frametitle{Эмпирические оценки обобщающей способности}
 		\begin{itemize}
-			\item Эмпирический риск на тестовых данных (hold-out)
+			\item Отложенная выборка (hold-out), $X = X_{train} \sqcup X_{test}$
 			$$
-			HO(\mu, X^{\ell}, X^{k}) = Q(\mu(X^{\ell}, X^{k})) \to min
-			$$
-			
-			\item Скользящий контроль (leave-one-out) $L = \ell + 1$:
-			$$
-			LOO(\mu, X^{L}) = \frac{1}{L} \sum_{i=1}^{L} \mathcal{L}(\mu(X^{L} \setminus \{x_i\}), x_i) \to min
+			HO(\mu, X_{train}, X_{test}) = Q(\mu(X_{train}, X_{test})) \to min
 			$$
 			
-			\item Кросс-проверка (cross-validation), $L = \ell + k, X^{L} = X_{n}^{\ell} \sqcup X_{n}^{k}$:
+			\item Скользящий контроль (leave-one-out):
 			$$
-			CV(\mu, X^{L}) = \frac{1}{|N|} \sum_{n \in N} Q(\mu(X_{n}^{\ell}), X_{n}^{k} ) \to min
+			LOO(\mu, X) = \frac{1}{L} \sum_{i=1}^{L} Q(\mu(X \setminus \{x_i\}), x_i) \to min
+			$$
+			
+			\item Кросс-проверка (cross-validation), 
+			$X = X_1 \sqcup X_2 \sqcup ... \sqcup X_k$
+			%$L = \ell + k, X^{L} = X_{n}^{\ell} \sqcup X_{n}^{k}$:
+			$$
+			CV(\mu, X^{L}) = \frac{1}{k} \sum_{i=1}^{k} Q(\mu(X \setminus X_{i}), X_{k}) \to min
 			$$
 		\end{itemize}
 	\end{frame}
@@ -456,13 +445,6 @@
 		\end{itemize}	
 	\end{frame}
 	
-	
-	\begin{frame}
-		\frametitle{}
-		
-		\includegraphics[width=0.25\textwidth]{img/underfit.png}		
-		
-	\end{frame}
 
 	\section{Особенности в данных и постановках задач}
 	\begin{frame}
